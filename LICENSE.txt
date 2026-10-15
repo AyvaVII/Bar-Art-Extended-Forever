@@ -1,0 +1,26 @@
+Bar Art Extended - License
+
+Copyright (c) 2026 AyvaVII. All rights reserved, except as allowed below.
+
+1. Use
+   You may use this addon for free. You may change the files for your own personal
+   use.
+
+2. No copying
+   You may not copy, re-upload or redistribute this addon, or parts of its code, in
+   original or modified form, without the written permission of the author.
+
+3. Continuation
+   If the project is no longer maintained - meaning the author has published no
+   update for 12 months - anyone may take over maintenance and publish continued
+   versions. Whoever does so must keep this license text and name AyvaVII as the
+   original author.
+
+4. Blizzard content
+   The artwork shown by this addon is loaded from the game client and belongs to
+   Blizzard Entertainment. This addon is not affiliated with or endorsed by Blizzard
+   Entertainment or the authors of Bartender4.
+
+5. No warranty
+   This addon is provided "as is", without warranty of any kind. Use it at your own
+   risk.

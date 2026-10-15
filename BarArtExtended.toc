@@ -1,0 +1,19 @@
+## Interface: 16001
+## Title: Bar Art Extended
+## Notes: Blizzard-style artwork (borders, dividers, slot backgrounds, gryphons) for the default UI action bars and Bartender4.
+## Author: AyvaVII
+## Version: @project-version@
+## OptionalDeps: Bartender4
+## SavedVariables: BarArtExtendedDB
+## IconTexture: Interface\AddOns\BarArtExtended\Media\Icon.tga
+## X-Curse-Project-ID: 1744643
+
+Core.lua
+Bars.lua
+Slots.lua
+Blizzard.lua
+Border.lua
+Dividers.lua
+Gryphons.lua
+Tint.lua
+Options.lua
