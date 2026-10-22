@@ -257,3 +257,8 @@ SlashCmdList.BARARTEXTENDED = function(message)
     local a, b, c, d = rest:lower():match("^(%S*)%s*(%S*)%s*(%S*)%s*(%S*)")
     handler(a, b, c, d, rest)
 end
+
+SLASH_SIMPLERELOAD1 = "/rl"
+SlashCmdList["SIMPLERELOAD"] = function()
+    ReloadUI()
+end
