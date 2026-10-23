@@ -6,8 +6,7 @@ Works with the default UI and with Bartender4. Made for the WoW Forever beta (bu
 ## Install
 
 1. Download the latest version from [CurseForge](https://www.curseforge.com/wow/addons/bar-art-extended-forever).
-2. Unzip the `BarArtExtended` folder to `World of Warcraft\_classic_beta_\Interface\AddOns`
-   (the folder in front of `Interface` may change when WoW Forever is released).
+2. Unzip the `BarArtExtended` folder to `World of Warcraft\_forever_\Interface\AddOns`.
 3. Start WoW and type `/bae`.
 
 ## Features
@@ -31,6 +30,7 @@ Works with the default UI and with Bartender4. Made for the WoW Forever beta (bu
 | `/bae profile [name]` | list or switch profiles |
 | `/bae reset` | reset the active profile |
 | `/bae debug` | print what the addon found (for bug reports) |
+| `/rl` | hortcut for /reload |
 
 ## Bug reports
 
