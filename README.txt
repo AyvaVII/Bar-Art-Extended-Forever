@@ -1,17 +1,16 @@
-Bar Art Extended 0.1
+Bar Art Extended 1.0
 ====================
 
 Blizzard-style artwork for your action bars: borders, dividers, slot backgrounds
 and (with Bartender4) gryphons. Works with the default UI and with Bartender4.
-Made for the WoW Forever beta (build 16001).
+Made for WoW Forever.
 
 Installation
 ------------
 1. Close WoW.
 2. If you used "Blizzard Art Expanded" before, delete its folder from Interface\AddOns.
 3. Unzip the "BarArtExtended" folder to
-   World of Warcraft\_classic_beta_\Interface\AddOns
-   (The folder name in front of "Interface" may change when WoW Forever is released.)
+   World of Warcraft\_forever_\Interface\AddOns
 4. Start WoW.
 
 Usage
@@ -36,7 +35,6 @@ Commands
 /bae profile [name]          list or switch profiles
 /bae reset                   reset the active profile
 /bae debug                   print what the addon found (useful for bug reports)
-
-Version 0.1 is the first release and is only tested with the WoW Forever beta.
+/rl                          shortcut for /reload
 
 Author: AyvaVII

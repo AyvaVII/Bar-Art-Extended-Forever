@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0
+
+- New command `/rl` as a shortcut for `/reload`.
+- Installation path updated for the WoW Forever release: `World of Warcraft\_forever_\Interface\AddOns`.
+
 ## 0.1
 
 First release, made for the WoW Forever beta.

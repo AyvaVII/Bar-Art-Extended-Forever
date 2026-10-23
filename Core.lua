@@ -200,7 +200,7 @@ commands.profile = function(_, _, _, _, rest)
 end
 
 commands.debug = function()
-    print("Bar Art Extended 0.1 - Bartender4 installed:", tostring(BAE.BT4Installed))
+    print("Bar Art Extended - Bartender4 installed:", tostring(BAE.BT4Installed))
     local art = BAE.NativeBorder()
     print("Border source:", art and art:GetObjectType() or "none", "| margins l/r/t/b:", BAE.GetMargins(art))
     for n = 1, BAE.NUM_BARS do
@@ -258,7 +258,7 @@ SlashCmdList.BARARTEXTENDED = function(message)
     handler(a, b, c, d, rest)
 end
 
-SLASH_SIMPLERELOAD1 = "/rl"
-SlashCmdList["SIMPLERELOAD"] = function()
+SLASH_BARARTEXTENDEDRELOAD1 = "/rl"
+SlashCmdList["BARARTEXTENDEDRELOAD"] = function()
     ReloadUI()
 end
