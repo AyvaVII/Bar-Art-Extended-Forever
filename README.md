@@ -30,7 +30,7 @@ Works with the default UI and with Bartender4. Made for the WoW Forever beta (bu
 | `/bae profile [name]` | list or switch profiles |
 | `/bae reset` | reset the active profile |
 | `/bae debug` | print what the addon found (for bug reports) |
-| `/rl` | hortcut for /reload |
+| `/rl` | shortcut for /reload |
 
 ## Bug reports
 
