@@ -1,7 +1,7 @@
 # Bar Art Extended
 
 Blizzard-style artwork for your action bars: borders, dividers, slot backgrounds and (with Bartender4) gryphons.
-Works with the default UI and with Bartender4. Made for the WoW Forever beta (build 16001).
+Works with the default UI and with Bartender4. Made for the WoW Forever.
 
 ## Install
 
