@@ -2,7 +2,7 @@
 ## Title: Bar Art Extended
 ## Notes: Blizzard-style artwork (borders, dividers, slot backgrounds, gryphons) for the default UI action bars and Bartender4.
 ## Author: AyvaVII
-## Version: @project-version@
+## Version: v1.0
 ## OptionalDeps: Bartender4
 ## SavedVariables: BarArtExtendedDB
 ## IconTexture: Interface\AddOns\BarArtExtended\Media\Icon.tga

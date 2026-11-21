@@ -220,6 +220,61 @@ else
     main:Button("Open Edit Mode", 24, OpenEditMode)
 end
 
+-- Bars page ---------------------------------------------------------------------------
+local barsPage = NewPage("Bars")
+barsPage:Title("Bars", "Choose for every bar whether it gets the artwork: border, dividers and slot backgrounds.")
+if BAE.BT4Installed then
+    barsPage:Note("Switching off Bartender4 bar 1 also hides the gryphons.")
+end
+local listTop = barsPage.y
+local rows = {}
+for n = 1, BAE.NUM_BARS do
+    local box = CreateFrame("CheckButton", nil, barsPage.panel, "UICheckButtonTemplate")
+    box:SetSize(26, 26)
+    local text = barsPage.panel:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+    text:SetPoint("LEFT", box, "RIGHT", 4, 1)
+    box:SetScript("OnClick", function(button)
+        if barsPage.syncing then return end
+        BAE.db.disabledBars[n] = (not button:GetChecked()) or nil
+        BAE.Changed()
+    end)
+    box:Hide()
+    rows[n] = { box = box, text = text }
+end
+local empty = barsPage.panel:CreateFontString(nil, "OVERLAY", "GameFontDisable")
+empty:SetPoint("TOPLEFT", barsPage.panel, "TOPLEFT", 24, listTop)
+empty:SetText("No action bars found yet.")
+-- The list stays up to date while the page is open (bars can appear a moment later).
+barsPage.panel:HookScript("OnShow", function() C_Timer.After(0.3, function() barsPage:Refresh() end) end)
+C_Timer.NewTicker(1, function()
+    if barsPage.panel:IsShown() then barsPage:Refresh() end
+end)
+barsPage.refreshers[#barsPage.refreshers + 1] = function()
+    -- Collect the bars that exist, Bartender4's first, each group in number order.
+    local entries = {}
+    for n = 1, BAE.NUM_BARS do
+        local label, group, number = BAE.BarLabel(n)
+        if label then entries[#entries + 1] = { n = n, label = label, group = group, number = number } end
+    end
+    table.sort(entries, function(a, b)
+        if a.group ~= b.group then return a.group < b.group end
+        return a.number < b.number
+    end)
+
+    for _, row in ipairs(rows) do row.box:Hide() end
+    local y = listTop
+    for _, entry in ipairs(entries) do
+        local row = rows[entry.n]
+        row.text:SetText(entry.label)
+        row.box:ClearAllPoints()
+        row.box:SetPoint("TOPLEFT", barsPage.panel, "TOPLEFT", 20, y + 4)
+        row.box:SetChecked(not BAE.db.disabledBars[entry.n])
+        row.box:Show()
+        y = y - 28
+    end
+    empty:SetShown(#entries == 0)
+end
+
 -- Dark Mode page ----------------------------------------------------------------------
 local dark = NewPage("Dark")
 dark:Title("Dark Mode", "Darken the bar artwork, the buttons, the micro menu, bags and gryphons.")
@@ -314,6 +369,7 @@ end
 -- Registration ------------------------------------------------------------------------
 local category = Settings.RegisterCanvasLayoutCategory(main.panel, "Bar Art Extended")
 Settings.RegisterAddOnCategory(category)
+Settings.RegisterAddOnCategory(Settings.RegisterCanvasLayoutSubcategory(category, barsPage.panel, "Bars"))
 Settings.RegisterAddOnCategory(Settings.RegisterCanvasLayoutSubcategory(category, dark.panel, "Dark Mode"))
 Settings.RegisterAddOnCategory(Settings.RegisterCanvasLayoutSubcategory(category, profiles.panel, "Profiles"))
 

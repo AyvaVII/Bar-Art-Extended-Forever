@@ -24,16 +24,41 @@ local function Holder(button)
 end
 
 -- The bar's own slot layers are replaced by ours while a bar is decorated.
+-- Blizzard changes the transparency of these layers itself (empty / filled button), so
+-- we do not remember a value once. Instead we listen to what Blizzard asks for while the
+-- layer is hidden, and give back exactly that when the bar is switched off.
+local function Track(region)
+    if region.baeTracked then return end
+    region.baeTracked = true
+    hooksecurefunc(region, "SetAlpha", function(self, alpha)
+        if self.baeForcing then return end
+        self.baeWanted = alpha
+        if self.baeHidden then
+            self.baeForcing = true
+            self:SetAlpha(0)
+            self.baeForcing = nil
+        end
+    end)
+end
+
 local function SetNativeHidden(button, hide)
     for _, key in ipairs({ "SlotBackground", "SlotArt" }) do
         local region = button[key]
         if region then
+            Track(region)
             if hide then
-                if hiddenNative[region] == nil then hiddenNative[region] = region:GetAlpha() end
-                region:SetAlpha(0)
-            elseif hiddenNative[region] ~= nil then
-                region:SetAlpha(hiddenNative[region])
+                if not region.baeHidden then
+                    region.baeWanted = region:GetAlpha()
+                    region.baeHidden = true
+                    hiddenNative[region] = true
+                    region.baeForcing = true
+                    region:SetAlpha(0)
+                    region.baeForcing = nil
+                end
+            elseif region.baeHidden then
+                region.baeHidden = nil
                 hiddenNative[region] = nil
+                region:SetAlpha(region.baeWanted or 1)
             end
         end
     end
@@ -74,7 +99,9 @@ local function UpdateButton(n, i, button)
     if not active and not holders[button] then return end
     local holder = Holder(button)
     if not holder then return end
-    SetNativeHidden(button, active)
+    -- Only Bartender4 shows its own slot art on empty buttons. In the default UI these
+    -- layers are left alone, so switching a bar off cannot leave anything behind.
+    if n <= BAE.BT4_SLOTS then SetNativeHidden(button, active) end
     if not active or not BAE.Present(n, i, button) or db.iconArt == "none" then
         holder.back:Hide()
         holder.art:Hide()
@@ -112,13 +139,23 @@ local function Update()
     end
 end
 
+-- For /bae debug: is our own artwork drawn for this button?
+function BAE.HolderInfo(button)
+    local holder = holders[button]
+    if not holder then return nil end
+    return ("%s/%s"):format(holder.art:IsShown() and "shown" or "hidden", holder.back:IsShown() and "shown" or "hidden")
+end
+
 local function Hide()
     for _, holder in pairs(holders) do
         holder.back:Hide()
         holder.art:Hide()
         holder.key = nil
     end
-    for region, alpha in pairs(hiddenNative) do region:SetAlpha(alpha) end
+    for region in pairs(hiddenNative) do
+        region.baeHidden = nil
+        region:SetAlpha(region.baeWanted or 1)
+    end
     wipe(hiddenNative)
 end
 

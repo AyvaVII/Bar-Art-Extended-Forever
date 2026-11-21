@@ -1,4 +1,4 @@
-Bar Art Extended 1.0
+Bar Art Extended 1.1
 ====================
 
 Blizzard-style artwork for your action bars: borders, dividers, slot backgrounds
@@ -16,7 +16,8 @@ Installation
 Usage
 -----
 Open the options with /bae  (Game Menu > Options > AddOns > Bar Art Extended).
-Pages: Bar Art Extended, Dark Mode, Profiles.
+Pages: Bar Art Extended, Bars, Dark Mode, Profiles.
+On the "Bars" page you can switch the artwork on or off for every bar.
 
 Default UI:  bars 2-8 are decorated, bar 1 keeps Blizzard's own artwork.
              Gryphons and button spacing are set in Blizzard's Edit Mode.

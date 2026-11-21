@@ -58,6 +58,7 @@ end
 function BAE.BarActive(n)
     local db = BAE.db
     if not db or not db.enabled then return false end
+    if db.disabledBars and db.disabledBars[n] then return false end
     local kind, id = Kind(n)
     local bar = BAE.GetBar(n)
     if not bar then return false end
@@ -66,6 +67,49 @@ function BAE.BarActive(n)
         return id ~= 1 and bar:IsVisible() and true or false
     end
     return true
+end
+
+-- Bars that have been seen on screen. The options list is built from this, so it is
+-- complete the moment the options open, whatever the bars are doing at that second.
+-- (Blizzard bars are only counted after startup: Bartender4 hides them a few seconds in.)
+local loadTime = GetTime()
+BAE.known = {}
+
+function BAE.RememberBars()
+    local settled = GetTime() - loadTime > 15
+    for n = 1, BAE.NUM_BARS do
+        if not BAE.known[n] and (settled or Kind(n) == "bt4") then
+            local bar = BAE.GetBar(n)
+            if bar and bar:IsVisible() then BAE.known[n] = true end
+        end
+    end
+end
+
+-- The name Bartender4 shows for one of its bars (so it matches Bartender4's own options).
+function BAE.BT4BarName(bar, id)
+    local name = bar.name
+    if type(name) ~= "string" or name == "" then name = bar.config and bar.config.name end
+    if type(name) ~= "string" or name == "" then name = "Bar " .. id end
+    return name
+end
+
+-- Name of a bar for the options list, plus a sort group and number. Returns nil if the
+-- bar does not exist or has never been visible (and is not switched off).
+function BAE.BarLabel(n)
+    local kind, id = Kind(n)
+    if kind == "blizzard" and id == 1 then return nil end
+    local bar = BAE.GetBar(n)
+    if not bar then return nil end
+    local off = BAE.db and BAE.db.disabledBars and BAE.db.disabledBars[n]
+    -- Bartender4 also tells us whether the bar is switched on in its own options.
+    -- (Bartender4 hides bars that are empty, so "visible" alone is not enough.)
+    local enabled = kind == "bt4" and bar.config ~= nil and bar.config.enabled ~= false
+    if not (off or BAE.known[n] or enabled or bar:IsVisible()) then return nil end
+    if kind == "bt4" then
+        local name = BAE.BT4BarName(bar, id)
+        return ("%s (Bartender4)"):format(name), 1, tonumber(name:match("%d+")) or id
+    end
+    return ("Action Bar %d (default UI)"):format(id), 2, id
 end
 
 -- Does this button take part in the bar's layout?

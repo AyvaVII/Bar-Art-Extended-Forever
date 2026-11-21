@@ -5,6 +5,7 @@ BAE.pages = {}
 -- Settings ------------------------------------------------------------------
 local defaults = {
     enabled = true,
+    disabledBars = {},      -- disabledBars[slot] = true switches the artwork off for that bar
     border = true,
     dividers = true,
     borderPadding = 0,
@@ -49,6 +50,7 @@ end
 
 function BAE.Update()
     local db = BAE.db
+    if db then BAE.RememberBars() end
     if not db or InCombatLockdown() then return end
     if db.enabled then
         running = true
@@ -212,9 +214,29 @@ commands.debug = function()
         end
         if bar then
             local border = BAE.borderFrames[n]
-            print(("%s: visible=%s buttons=%d active=%s horizontal=%s border=%s"):format(
+            local extra = (" known=%s label=%s"):format(tostring(BAE.known[n] == true), tostring((BAE.BarLabel(n))))
+            if n <= BAE.BT4_SLOTS then
+                extra = extra .. (" name=%s enabled=%s"):format(tostring(bar.name),
+                    tostring(bar.config and bar.config.enabled))
+            end
+            print(("%s: visible=%s buttons=%d active=%s horizontal=%s border=%s%s"):format(
                 BAE.SlotName(n), tostring(bar:IsVisible()), present, tostring(BAE.BarActive(n)),
-                tostring(BAE.IsHorizontal(n)), tostring(border and border:IsShown() or false)))
+                tostring(BAE.IsHorizontal(n)), tostring(border and border:IsShown() or false), extra))
+        end
+    end
+    -- One empty-looking button per visible Blizzard bar: what is shown, and how strongly?
+    local function Alpha(region)
+        if not region then return "-" end
+        return ("%.2f%s"):format(region:GetAlpha(), region:IsShown() and "" or " hidden")
+    end
+    for n = BAE.BT4_SLOTS + 2, BAE.NUM_BARS do
+        local bar = BAE.GetBar(n)
+        local button = BAE.GetButton(n, 12)
+        if bar and bar:IsVisible() and button then
+            local holder = BAE.HolderInfo and BAE.HolderInfo(button)
+            print(("  %s, button 12: shown=%s alpha=%.2f normal=%s slotBackground=%s slotArt=%s ourArt=%s"):format(
+                BAE.SlotName(n), tostring(button:IsShown()), button:GetAlpha(), Alpha(button.NormalTexture),
+                Alpha(button.SlotBackground), Alpha(button.SlotArt), holder or "none"))
         end
     end
     for _, line in ipairs(BAE.DividerInfo()) do print(line) end

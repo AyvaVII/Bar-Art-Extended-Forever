@@ -2,6 +2,8 @@ local ADDON, BAE = ...
 
 -- Blizzard default UI only ------------------------------------------------------------
 -- 1. Buttons of bars 2-8 get the button frame and icon layout of the main bar.
+--    Transparency is never touched here: Blizzard changes it constantly (empty/filled
+--    button), so a remembered value would go stale and leave empty slots visible.
 -- 2. The border of bar 1 can be hidden.
 local savedRegions = {}      -- button -> { region -> original state }
 local KEYS = { "NormalTexture", "PushedTexture", "icon", "IconMask" }
@@ -12,7 +14,6 @@ local function Save(region)
         atlas = region.GetAtlas and region:GetAtlas(),
         texture = region.GetTexture and region:GetTexture(),
         coords = region.GetTexCoord and { region:GetTexCoord() },
-        alpha = region.GetAlpha and region:GetAlpha(),
         points = {},
     }
     if region.GetDrawLayer then state.layer, state.sublevel = region:GetDrawLayer() end
@@ -25,7 +26,6 @@ local function Load(region, state)
     elseif state.texture then region:SetTexture(state.texture) end
     if state.coords then region:SetTexCoord(unpack(state.coords)) end
     if state.layer then region:SetDrawLayer(state.layer, state.sublevel) end
-    if state.alpha then region:SetAlpha(state.alpha) end
     region:ClearAllPoints()
     region:SetSize(state.width, state.height)
     for _, point in ipairs(state.points) do region:SetPoint(unpack(point)) end
@@ -36,8 +36,6 @@ local function RestoreButton(button)
     if not saved then return end
     for region, state in pairs(saved) do Load(region, state) end
     savedRegions[button] = nil
-    -- Let Blizzard rebuild its own look for the current bar settings.
-    if button.UpdateButtonArt then button:UpdateButtonArt() end
 end
 
 local function StyleButton(n, button)
@@ -58,7 +56,6 @@ local function StyleButton(n, button)
                 if atlas then to:SetAtlas(atlas) else to:SetTexture(from:GetTexture()) end
                 to:SetTexCoord(from:GetTexCoord())
                 to:SetDrawLayer(from:GetDrawLayer())
-                to:SetAlpha((saved[to].alpha or 1) * BAE.db.alpha)
             end
             BAE.MirrorRegion(from, to, native, button, factor)
         end

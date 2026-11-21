@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1
+
+- Fixed: in the default UI, switching the addon or a bar off left slot backgrounds on empty buttons.
+- New "Bars" page: switch the artwork (border, dividers, slot backgrounds) on or off for each bar separately. The choice is saved per profile. The list is complete as soon as you open the options (also for bars Bartender4 hides while they are empty), and Bartender4 bars use the names Bartender4 shows.
+
 ## 1.0
 
 - New command `/rl` as a shortcut for `/reload`.
